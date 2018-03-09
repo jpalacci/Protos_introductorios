@@ -23,15 +23,12 @@ int main(int argc, char ** argv)
 
 	if(pid == 0)
 	{
-		int stdin_copy = dup(0);
 
 		dup2(parentpipe[0], STDIN_FILENO);
 		dup2(childpipe[1], STDOUT_FILENO);
 
 		close(childpipe[0]);
 		close(parentpipe[1]);
-
-		//Como hacer sin semaforo?
 
 		system(argv[1]);
 
