@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <semaphore.h>
+#define BUFF_SIZE 30
 
 char * readInput();
 int calculateParity(char * s);
@@ -45,12 +46,16 @@ int main(int argc, char ** argv)
 
 		int c;
 		int inXor = 0;
+		char buff[BUFF_SIZE];
+		int bytesRead;
 
-		while( (c = getchar()) != EOF)
+		while((bytesRead = read(STDIN_FILENO, buff, BUFF_SIZE - 1)) > 0)
 		{
-			inXor ^= c;
-			write(parentpipe[1], (char*)&c, sizeof(char));
+			buff[bytesRead] = 0;
+			inXor ^= calculateParity(buff);
+			write(parentpipe[1], buff, bytesRead);
 		}
+
 		
 		close(parentpipe[1]);
 
@@ -58,15 +63,20 @@ int main(int argc, char ** argv)
 		
 		int outXor = 0;
 
-		while(read(childpipe[0], &a, sizeof(char)) > 0)
+		while((bytesRead = read(childpipe[0], buff, BUFF_SIZE - 1)) > 0)
 		{
-			outXor ^= a;
-			putchar(a);
+			buff[bytesRead] = 0;
+			outXor ^= calculateParity(buff);
+			printf("%s\n", buff);
 		}
+
+		//We take the last nl char
+		outXor = outXor ^ '\n';
+
 		putchar('\n');
 
-		fprintf(stderr, "in parity: 0x%x\n", inXor);
-      	fprintf(stderr, "out parity: 0x%x\n", outXor);
+		fprintf(stderr, "in parity: 0x%02x\n", inXor);
+      	fprintf(stderr, "out parity: 0x%02x\n", outXor);
 
 
 
