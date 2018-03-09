@@ -92,19 +92,3 @@ int calculateParity(char * s)
   return ret;
 }
 
-
-
-char * readInput()
-{
-  int c;
-  char * ret = malloc(10);
-  int index = 0;
-
-  while((c = getchar()) != EOF && index < 10)
-  {
-      ret[index++] = c;
-  }
-
-  ret[index] = 0;
-  return ret;
-}
