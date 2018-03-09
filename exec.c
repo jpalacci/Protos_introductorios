@@ -18,9 +18,6 @@ int main(int argc, char ** argv)
 	pipe(parentpipe);
 	pipe(childpipe);
 
-	sem_t * sem;
-
-	sem = sem_open("/exec", O_CREAT, 0644, 0);
 
 	pid = fork();
 
