@@ -8,6 +8,7 @@
 
 char * readInput();
 int calculateParity(char * s);
+void parent(int childpipe[] , int parentpipe[]);
 
 
 int main(int argc, char ** argv)
@@ -38,54 +39,48 @@ int main(int argc, char ** argv)
 	}
 	else
 	{
-
-
 		close(childpipe[1]);
 		close(parentpipe[0]);
 
-
-		int c;
-		int inXor = 0;
-		char buff[BUFF_SIZE];
-		int bytesRead;
-
-		while((bytesRead = read(STDIN_FILENO, buff, BUFF_SIZE - 1)) > 0)
-		{
-			buff[bytesRead] = 0;
-			inXor ^= calculateParity(buff);
-			write(parentpipe[1], buff, bytesRead);
-		}
-
-		
-		close(parentpipe[1]);
-
-		char a;
-		
-		int outXor = 0;
-
-		while((bytesRead = read(childpipe[0], buff, BUFF_SIZE - 1)) > 0)
-		{
-			buff[bytesRead] = 0;
-			outXor ^= calculateParity(buff);
-			printf("%s\n", buff);
-		}
-
-		//We take the last nl char
-		outXor = outXor ^ '\n';
-
-		putchar('\n');
-
-		fprintf(stderr, "in parity: 0x%02x\n", inXor);
-      	fprintf(stderr, "out parity: 0x%02x\n", outXor);
-
-
-
-
+		parent(childpipe , parentpipe);
 
 	}
 
 	return 0;
 
+}
+
+
+void parent(int childpipe[] , int parentpipe[])
+{
+	int c;
+	int inXor = 0;
+	char buff[BUFF_SIZE];
+	int bytesRead;
+	char a;
+	int outXor = 0;
+
+	while((bytesRead = read(STDIN_FILENO, buff, BUFF_SIZE - 1)) > 0)
+	{
+		buff[bytesRead] = 0;
+		inXor ^= calculateParity(buff);
+		write(parentpipe[1], buff, bytesRead);
+	}
+	
+	close(parentpipe[1]);
+
+	while((bytesRead = read(childpipe[0], buff, BUFF_SIZE - 1)) > 0)
+	{
+		buff[bytesRead] = 0;
+		outXor ^= calculateParity(buff);
+		printf("%s", buff);
+	}
+
+	//We take the last nl char
+	outXor = outXor ^ '\n';
+
+	fprintf(stderr, "in parity: 0x%02x\n", inXor);
+  	fprintf(stderr, "out parity: 0x%02x\n", outXor);
 }
 
 int calculateParity(char * s)
