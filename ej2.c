@@ -12,7 +12,7 @@ int main(int argc, char * argv[])
 	int pipeToParent[2];
 	int buffersize;
 	
-	if(pipe(pipeToChild) == -1 || pipe(pipeToParent) == -1)
+	if(pipe(pipeToChild) < 0 || pipe(pipeToParent) < 0)
 	{
 		return PIPE_FAIL;
 	}
@@ -34,6 +34,8 @@ int main(int argc, char * argv[])
 
 		parent(pipeToParent, pipeToChild, buffersize);
 
+		wait(NULL);
+
 	}
 	else if(pid == 0)
 	{
@@ -47,6 +49,7 @@ int main(int argc, char * argv[])
 		system(argv[COMMAND]);
 
 		close(pipeToParent[WRITE]);
+
 	}
 	else
 	{
@@ -67,7 +70,7 @@ void parent(int pipeToParent[], int pipeToChild[], int buffSize)
 	int readCount = 0;
 	
 
-	while((bytesRead = read(STDIN_FILENO, buff, buffSize-1)) > 0)
+	while((bytesRead = read(STDIN_FILENO, buff, buffSize - 1)) > 0)
 	{
 		buff[bytesRead] = 0;
 		inXor ^= calculateParity(buff);
