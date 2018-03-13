@@ -35,5 +35,5 @@ Should output:
 -------------------------------------------
 
 ## Notes ##
-
+* We introduced the buffer_lenght parameter in order to test the program performance with different buffer lenghts
 * The program removes the trailing new line character in the output of the command and then calculates the output xor.
