@@ -37,4 +37,4 @@ Should output:
 ## Notes ##
 
 * Made tests of speed using ps and changing the value of buffer_lenght
-* The program removes the trailing new line character in the output of the command and then calculates the xor.
+* The program removes the trailing new line character in the output of the command and then calculates the output xor.
