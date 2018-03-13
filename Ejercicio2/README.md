@@ -1,5 +1,3 @@
-# Protos_introductorios
-
 ## Ej2 ##
 
 To compile:
