@@ -1,6 +1,6 @@
 # Protos_introductorios
 
-Ej2:
+## Ej2 ##
 
 To compile:
 
@@ -12,7 +12,7 @@ To clean:
 
 -----------------------------------------
 
-Usage:
+## Usage ##
 
 >./ej2 buffer_lenght command
 
@@ -34,4 +34,7 @@ Should output:
 
 -------------------------------------------
 
-Made tests of speed using ps and changing the value of buffer_lenght
+## Notes ##
+
+* Made tests of speed using ps and changing the value of buffer_lenght
+* The program removes the trailing new line character in the output of the command and then calculates the xor.
